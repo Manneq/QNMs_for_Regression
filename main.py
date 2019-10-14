@@ -1,6 +1,7 @@
 """
 Name:       QNMs_for_Regression
-Purpose:    Course project to compare Quasi-Newton Methods
+Purpose:    Course project to compare Quasi-Newton Methods (SR1, BHHH, BFGS,
+                L-BFGS)
 Author:     Artem "Manneq" Arkhipov
 Created:    14/10/2019
 """

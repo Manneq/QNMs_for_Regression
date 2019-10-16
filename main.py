@@ -196,6 +196,10 @@ def make_approximation_video(newtons_data, sr1_data, bhhh_data, bfgs_data,
     # Initialize paths to frames
     frames_paths = []
 
+    # Check temp directory, if not - create it
+    if not os.path.exists('temp'):
+        os.mkdir('temp')
+
     # Cycle to draw frames
     for i in range(max(len(newtons_data[0]), len(sr1_data[0]),
                        len(bhhh_data[0]), len(bfgs_data[0]),

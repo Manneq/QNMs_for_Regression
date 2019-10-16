@@ -64,7 +64,7 @@ def error_mse_fprime(params, f, x, y):
                 y: numpy array of float (n, )
         return: numpy vector of float (2, )
     """
-    return optimize.approx_fprime(params, error_mse, 1e-3, f, x, y)
+    return optimize.approx_fprime(params, error_mse, 1e-8, f, x, y)
 
 
 def create_noisy_data(n, log_file):
@@ -476,7 +476,7 @@ def bhhh_algorithm(initial_approximation, args, eps=1e-3):
             return: jacobian of natural logarithm of square difference of
                 regression function and noisy samples y
         """
-        return optimize.approx_fprime(xn, ln_regression, 1e-3, f, x, y)
+        return optimize.approx_fprime(xn, ln_regression, 1e-8, f, x, y)
 
     def compute_a(xn, f, x, y):
         """

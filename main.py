@@ -374,7 +374,7 @@ def sr1_method(initial_approximation, args, eps=1e-3):
                     2.  x: np.array of float - (n, )
                     3.  y: np.array of float - (n, )
                 eps: estimated error - 1e-3
-        return: xn_1: tuple of params - float
+        return: xn_1: tuple of float params
     """
     # Initialize SR1 hessian
     hessian = optimize.SR1()

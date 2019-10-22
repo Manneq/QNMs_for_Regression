@@ -221,12 +221,12 @@ def make_approximation_video(newtons_data, sr1_data, bhhh_data, bfgs_data,
         draw_approximation([newtons_data[0][0:border_newtons],
                             newtons_data[1][0:border_newtons],
                             newtons_data[2][0:border_newtons]],
-                           [bhhh_data[0][0:border_bhhh],
-                            bhhh_data[1][0:border_bhhh],
-                            bhhh_data[2][0:border_bhhh]],
                            [sr1_data[0][0:border_sr1],
                             sr1_data[1][0:border_sr1],
                             sr1_data[2][0:border_sr1]],
+                           [bhhh_data[0][0:border_bhhh],
+                            bhhh_data[1][0:border_bhhh],
+                            bhhh_data[2][0:border_bhhh]],
                            [bfgs_data[0][0:border_bfgs],
                             bfgs_data[1][0:border_bfgs],
                             bfgs_data[2][0:border_bfgs]],
@@ -633,7 +633,7 @@ def main():
     # Open log file
     log_file = open('log.txt', 'w')
 
-    x, y = create_noisy_data(101, log_file)
+    x, y = create_noisy_data(1001, log_file)
 
     # Define data for callbacks
     global x_callback, y_callback

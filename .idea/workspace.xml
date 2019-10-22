@@ -162,7 +162,14 @@
       <option name="project" value="LOCAL" />
       <updated>1571235904219</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="I'm soooooo retarded">
+      <created>1571771833972</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1571771833972</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -183,6 +190,7 @@
       <path value="$PROJECT_DIR$/QNMs_for_Regression" />
     </ignored-roots>
     <MESSAGE value="First commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="First commit" />
+    <MESSAGE value="I'm soooooo retarded" />
+    <option name="LAST_COMMIT_MESSAGE" value="I'm soooooo retarded" />
   </component>
 </project>

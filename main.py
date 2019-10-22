@@ -407,7 +407,11 @@ def sr1_method(initial_approximation, args, eps=1e-3):
         step = optimize.line_search(error_mse, hessian_dot_fprime,
                                     np.r_[xn[0], xn[1]],
                                     -np.r_[d_xn[0], d_xn[1]],
-                                    args=(args[0], args[1], args[2]))
+                                    gfk=np.r_[d_xn[0], d_xn[1]],
+                                    old_fval=error_mse(xn, args[0],
+                                                       args[1], args[2]),
+                                    args=(args[0], args[1], args[2]),
+                                    maxiter=10000)
         step = step[0]
 
         if step is None:
@@ -493,7 +497,7 @@ def bhhh_algorithm(initial_approximation, args, eps=1e-3):
         """
         res = 0
 
-        for k in range(args[1].size):
+        for k in range(x.size):
             res += ln_regression_fprime(xn, f, x[k], y[k]).reshape(1, 2) * \
                    ln_regression_fprime(xn, f, x[k], y[k]).reshape(2, 1)
 
@@ -509,7 +513,11 @@ def bhhh_algorithm(initial_approximation, args, eps=1e-3):
         step = optimize.line_search(error_mse, a_dot_error_fprime,
                                     np.r_[xn[0], xn[1]],
                                     -np.r_[d_xn[0], d_xn[1]],
-                                    args=(args[0], args[1], args[2]))
+                                    np.r_[d_xn[0], d_xn[1]],
+                                    old_fval=error_mse(xn, args[0],
+                                                       args[1], args[2]),
+                                    args=(args[0], args[1], args[2]),
+                                    maxiter=10000)
         step = step[0]
 
         if step is None:

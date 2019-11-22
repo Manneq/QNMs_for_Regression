@@ -385,6 +385,7 @@ def sr1_method(initial_approximation, args, eps=1e-3):
     hessian.initialize(n=2, approx_type='inv_hess')
 
     xn = initial_approximation
+    old_old_error = None
 
     def hessian_dot_fprime(xn, f, x, y):
         """
@@ -403,13 +404,12 @@ def sr1_method(initial_approximation, args, eps=1e-3):
         d_xn = hessian_dot_fprime(xn, args[0], args[1], args[2])
 
         # Compute a step size using scipy.optimize.line_search to satisfy
-        # the Wolf conditions
-        step = optimize.line_search(error_mse, hessian_dot_fprime,
-                                    np.r_[xn[0], xn[1]],
-                                    -np.r_[d_xn[0], d_xn[1]],
-                                    gfk=np.r_[d_xn[0], d_xn[1]],
+        # the Wolfe conditions
+        step = optimize.line_search(error_mse, hessian_dot_fprime, xn, -d_xn,
+                                    gfk=d_xn,
                                     old_fval=error_mse(xn, args[0],
                                                        args[1], args[2]),
+                                    old_old_fval=old_old_error,
                                     args=(args[0], args[1], args[2]),
                                     maxiter=10000)
         step = step[0]
@@ -431,6 +431,8 @@ def sr1_method(initial_approximation, args, eps=1e-3):
         hessian.update(xn_1 - xn,
                        error_mse_fprime(xn_1, args[0], args[1], args[2]) -
                        error_mse_fprime(xn, args[0], args[1], args[2]))
+
+        old_old_error = error_mse(xn, args[0], args[1], args[2])
         xn = xn_1
 
     return xn_1
@@ -509,11 +511,9 @@ def bhhh_algorithm(initial_approximation, args, eps=1e-3):
         d_xn = a_dot_error_fprime(xn, args[0], args[1], args[2])
 
         # Compute a step size using scipy.optimize.line_search to satisfy
-        # the Wolf conditions
-        step = optimize.line_search(error_mse, a_dot_error_fprime,
-                                    np.r_[xn[0], xn[1]],
-                                    -np.r_[d_xn[0], d_xn[1]],
-                                    np.r_[d_xn[0], d_xn[1]],
+        # the Wolfe conditions
+        step = optimize.line_search(error_mse, a_dot_error_fprime, xn, -d_xn,
+                                    gfk=d_xn,
                                     old_fval=error_mse(xn, args[0],
                                                        args[1], args[2]),
                                     args=(args[0], args[1], args[2]),
@@ -566,7 +566,7 @@ def do_regressions(f, x, y, initial_approximation, log_file, name):
                                method='Newton-CG', jac=error_mse_fprime,
                                args=(f, x, y),
                                callback=callback_function,
-                               options={'eps': 1e-3})
+                               options={'xtol': 1e-3})
     f_newton = compute_regression_function(f, x, result.x)
     newton_data = \
         [np.array(a_data), np.array(b_data), np.array(f_data)]
@@ -602,7 +602,7 @@ def do_regressions(f, x, y, initial_approximation, log_file, name):
     result = optimize.minimize(error_mse, initial_approximation, method='BFGS',
                                args=(f, x, y),
                                callback=callback_function,
-                               options={'eps': 1e-3})
+                               options={'gtol': 1e-3})
     f_bfgs = compute_regression_function(f, x, result.x)
     bfgs_data = [np.array(a_data), np.array(b_data), np.array(f_data)]
 
@@ -615,7 +615,7 @@ def do_regressions(f, x, y, initial_approximation, log_file, name):
     result = optimize.minimize(error_mse, initial_approximation,
                                method='L-BFGS-B', callback=callback_function,
                                args=(f, x, y),
-                               options={'eps': 1e-3})
+                               options={'ftol': 1e-3})
     f_lbfgs = compute_regression_function(f, x, result.x)
     lbfgs_data = [np.array(a_data), np.array(b_data), np.array(f_data)]
 

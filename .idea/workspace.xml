@@ -176,7 +176,14 @@
       <option name="project" value="LOCAL" />
       <updated>1571774416615</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Final">
+      <created>1574423000612</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1574423000612</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -199,6 +206,7 @@
     <MESSAGE value="First commit" />
     <MESSAGE value="I'm soooooo retarded" />
     <MESSAGE value="Meh" />
-    <option name="LAST_COMMIT_MESSAGE" value="Meh" />
+    <MESSAGE value="Final" />
+    <option name="LAST_COMMIT_MESSAGE" value="Final" />
   </component>
 </project>

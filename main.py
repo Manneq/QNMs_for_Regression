@@ -12,6 +12,7 @@ from scipy import optimize
 import cv2
 import math
 import os
+import time
 
 # Set data for scipy.optimize.minimize callbacks
 a_data, b_data, f_data = [], [], []
@@ -364,8 +365,6 @@ def write_callbacks(log_file):
         log_file.write('{0:9d}   {1:9f}   {2:9f}   {3:9f}\n'.
                        format(i + 1, a_data[i], b_data[i], f_data[i]))
 
-    log_file.write('\n')
-
     return
 
 
@@ -562,11 +561,13 @@ def do_regressions(f, x, y, initial_approximation, log_file, name):
 
     # Newton's method
     log_file.write('Newtons method: \n')
+    start_time = time.clock()
     result = optimize.minimize(error_mse, initial_approximation,
                                method='Newton-CG', jac=error_mse_fprime,
                                args=(f, x, y),
                                callback=callback_function,
                                options={'xtol': 1e-3})
+    result_time = time.clock() - start_time
     f_newton = compute_regression_function(f, x, result.x)
     newton_data = \
         [np.array(a_data), np.array(b_data), np.array(f_data)]
@@ -575,9 +576,13 @@ def do_regressions(f, x, y, initial_approximation, log_file, name):
     write_callbacks(log_file)
     clear_callbacks()
 
+    log_file.write('Time: ' + str(result_time) + "\n")
+
     # Newton's method with SR1 strategy
     log_file.write('SR1 method: \n')
+    start_time = time.clock()
     result = sr1_method(initial_approximation, (f, x, y))
+    result_time = time.clock() - start_time
     f_sr1 = compute_regression_function(f, x, result)
     sr1_data = \
         [np.array(a_data), np.array(b_data), np.array(f_data)]
@@ -586,9 +591,13 @@ def do_regressions(f, x, y, initial_approximation, log_file, name):
     write_callbacks(log_file)
     clear_callbacks()
 
+    log_file.write('Time: ' + str(result_time) + "\n")
+
     # BHHH algorithm
     log_file.write('Berndt-Hall-Hall-Hausman algorithm: \n')
+    start_time = time.clock()
     result = bhhh_algorithm(initial_approximation, (f, x, y))
+    result_time = time.clock() - start_time
     f_bhhh = compute_regression_function(f, x, result)
     bhhh_data = \
         [np.array(a_data), np.array(b_data), np.array(f_data)]
@@ -597,12 +606,16 @@ def do_regressions(f, x, y, initial_approximation, log_file, name):
     write_callbacks(log_file)
     clear_callbacks()
 
+    log_file.write('Time: ' + str(result_time) + "\n")
+
     # BFGS algorithm
     log_file.write('Broyden-Fletcher-Goldfarb-Shanno algorithm: \n')
+    start_time = time.clock()
     result = optimize.minimize(error_mse, initial_approximation, method='BFGS',
                                args=(f, x, y),
                                callback=callback_function,
                                options={'gtol': 1e-3})
+    result_time = time.clock() - start_time
     f_bfgs = compute_regression_function(f, x, result.x)
     bfgs_data = [np.array(a_data), np.array(b_data), np.array(f_data)]
 
@@ -610,18 +623,24 @@ def do_regressions(f, x, y, initial_approximation, log_file, name):
     write_callbacks(log_file)
     clear_callbacks()
 
+    log_file.write('Time: ' + str(result_time) + "\n")
+
     # L-BFGS algorithm
     log_file.write('Limited-memory BFGS:\n')
+    start_time = time.clock()
     result = optimize.minimize(error_mse, initial_approximation,
                                method='L-BFGS-B', callback=callback_function,
                                args=(f, x, y),
                                options={'ftol': 1e-3})
+    result_time = time.clock() - start_time
     f_lbfgs = compute_regression_function(f, x, result.x)
     lbfgs_data = [np.array(a_data), np.array(b_data), np.array(f_data)]
 
     # Manage callbacks data
     write_callbacks(log_file)
     clear_callbacks()
+
+    log_file.write('Time: ' + str(result_time) + "\n")
 
     # Draw regression results
     draw_result(f_newton, f_sr1, f_bhhh, f_bfgs, f_lbfgs, x, y, name)
